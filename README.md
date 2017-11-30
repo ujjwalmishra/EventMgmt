@@ -1,3 +1,31 @@
+To DO:
+
+1) Create following models:</br>
+    a) Super Admin</br>
+    b) Merchant</br>
+    c) Ticket</br>
+    d) Event</br>
+2) Create following endpoints:</br>
+    a) /admin/login</br>
+    b) /admin/create/merchant - POST</br>
+    c) /admin/update/merchant - POST/UPDATE</br>
+    d) /admin/delete/merchant - DELETE</br>
+    e) /admin/list/merchant - GET</br>
+    f) /merchant/login</br>
+    g) /merchant/profile</br>
+    h) /merchant/profile/update</br>
+    i) /merchant/resetpassword</br>
+    j) /merchant/updatepassword</br>
+    k) /merchant/create/event</br>
+    l) /merchant/update/event</br>
+    m) /merchant/delete/event</br>
+    n) /merchant/list</br>
+    o) /event/create</br>
+    p) /event/update/{id}</br>
+    q) /event/generate/{id}</br>
+    
+    QR Code and ticket svg generation functionality
+
 ![](https://lh4.googleusercontent.com/-PVw-ZUM9vV8/UuWeH51os0I/AAAAAAAAD6M/0Ikg7viJftQ/w1286-h566-no/hackathon-starter-logo.jpg)
 Hackathon Starter 
 =======================
