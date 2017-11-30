@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+const Merchant = require('./Merchant');
 const Schema = mongoose.Schema;
 
 const adminSchema = new mongoose.Schema({
