@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const merchantSchema = new mongoose.Schema({
   email: { type: String, unique: true },
@@ -9,7 +10,10 @@ const merchantSchema = new mongoose.Schema({
   passwordResetExpires: Date,
   tokens: Array,
   company: String,
-  mobile: String,
+  mobileNumber: {
+    type: String,
+    match: [/^[1-9][0-9]{9}$/, 'The value of path {PATH} ({VALUE}) is not a valid mobile number.']
+  },
   userCount: Number,
   eventCount: Number,
   address: String,
