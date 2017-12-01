@@ -108,12 +108,33 @@ function updateMerchant(req, res, next) {
   });
 }
 
-function deleteMerchant() {
-
+function deleteMerchant(req, res, next) {
+  const merchantId = req.body.merchantId;
+  if(merchantId == null) {
+    const err = new APIError('Provide a id!', httpStatus.NOT_FOUND);
+    return next(err); 
+  }
+  Merchant.find({ _id: merchantId })
+  .remove()
+  .exec()
+  .then(deletedMerchant => {
+    Admin.findOne({username: req.user.username})
+    .exec()
+    .then((admin) => {
+      admin.merchants.pull(merchantId);
+      admin.save()
+      .then(admin => res.json(deletedMerchant))
+      .catch(e => next(e));
+    })
+  })
+  .catch(e => next(e))
 }
 
-function getMerchants() {
-
+function getMerchants(req, res, next) {
+  const { limit = 50, skip = 0 } = req.query;
+  Merchant.list({ limit, skip })
+    .then(merchants => res.json(merchants))
+    .catch(e => next(e));
 }
 
 

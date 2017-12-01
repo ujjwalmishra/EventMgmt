@@ -18,13 +18,13 @@ router.route('/create/merchant')
   .post(expressJwt({ secret: config.jwtSecret }), adminCtrl.createMerchant);
 
 router.route('/update/merchant')
-  .post(adminCtrl.updateMerchant);
+  .post(expressJwt({ secret: config.jwtSecret }),adminCtrl.updateMerchant);
 
 router.route('/delete/merchant')
-  .post(adminCtrl.deleteMerchant);
+  .post(expressJwt({ secret: config.jwtSecret }),adminCtrl.deleteMerchant);
 
 router.route('/list/merchant')
-  .get(adminCtrl.getMerchants);
+  .get(expressJwt({ secret: config.jwtSecret }), adminCtrl.getMerchants);
 
 // router.route('/:userId')
 //   /** GET /api/users/:userId - Get user */
