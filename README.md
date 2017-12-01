@@ -1,16 +1,16 @@
 To DO:
 
 1) Create following models:</br>
-    a) Super Admin</br>
+    <strike>a)Super Admin</br>
     b) Merchant</br>
     c) Ticket</br>
-    d) Event</br>
+    d) Event</br></strike>
 2) Create following endpoints:</br>
-    a) /admin/login</br>
+    <strike>a) /admin/login</br>
     b) /admin/create/merchant - POST</br>
     c) /admin/update/merchant - POST/UPDATE</br>
     d) /admin/delete/merchant - DELETE</br>
-    e) /admin/list/merchant - GET</br>
+    e) /admin/list/merchant - GET</br></strike>
     f) /merchant/login</br>
     g) /merchant/profile</br>
     h) /merchant/profile/update</br>
