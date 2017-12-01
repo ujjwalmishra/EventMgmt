@@ -1,3 +1,31 @@
+To DO:
+
+1) Create following models:</br>
+    a) Super Admin</br>
+    b) Merchant</br>
+    c) Ticket</br>
+    d) Event</br>
+2) Create following endpoints:</br>
+    a) /admin/login</br>
+    b) /admin/create/merchant - POST</br>
+    c) /admin/update/merchant - POST/UPDATE</br>
+    d) /admin/delete/merchant - DELETE</br>
+    e) /admin/list/merchant - GET</br>
+    f) /merchant/login</br>
+    g) /merchant/profile</br>
+    h) /merchant/profile/update</br>
+    i) /merchant/resetpassword</br>
+    j) /merchant/updatepassword</br>
+    k) /merchant/create/event</br>
+    l) /merchant/update/event</br>
+    m) /merchant/delete/event</br>
+    n) /merchant/list</br>
+    n.1) /merchant/upload/template
+    o) /event/create</br>
+    p) /event/update/{id}</br>
+    q) /event/generate/{id}</br>
+
+
 # Express & mongoose REST API Boilerplate in ES6 with Code Coverage [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
 [![Build Status](https://img.shields.io/travis/KunalKapadia/express-mongoose-es6-rest-api/master.svg?style=flat-square)](https://travis-ci.org/KunalKapadia/express-mongoose-es6-rest-api)
