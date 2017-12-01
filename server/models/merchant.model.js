@@ -11,11 +11,17 @@ const MerchantSchema = new mongoose.Schema({
     type: String, 
     unique: true 
   },
-  password: String,
+  password:{
+    type: String,
+    required: true
+  },
   passwordResetToken: String,
   passwordResetExpires: Date,
   tokens: Array,
-  company: String,
+  company: {
+    type:String,
+    required: true
+  }, 
   mobileNumber: {
     type: String,
     match: [/^[1-9][0-9]{9}$/, 'The value of path {PATH} ({VALUE}) is not a valid mobile number.']
@@ -25,7 +31,7 @@ const MerchantSchema = new mongoose.Schema({
   address: String,
   events: [
     { type: Schema.Types.ObjectId, ref: 'Event' }
-  ]
+  ],
   profile: {
     name: String,
     location: String,

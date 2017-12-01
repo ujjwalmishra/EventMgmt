@@ -2,6 +2,8 @@ import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
+import bcrypt from 'bcrypt';
+import Merchant from './merchant.model';
 
 const Schema = mongoose.Schema;
 /**
@@ -38,18 +40,59 @@ const AdminSchema = new mongoose.Schema({
  * - validations
  * - virtuals
  */
+ AdminSchema.pre('save', function save(next) {
+
+  const admin = this;
+  if (!admin.isModified('password')) { 
+    return next(); }
+
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) { 
+      console.log("2ndt");
+      return next(err); }
+
+    bcrypt.hash(admin.password, salt).then(function(hash) {
+    // Store hash in your password DB.
+      admin.password = hash;
+      console.log("1st");
+      next();
+    })
+    .catch(() => next(err));
+
+  });
+});
 
 /**
  * Methods
  */
 AdminSchema.method({
+  comparePassword(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+      cb(err, isMatch);
+    })
+  }
 });
 
 /**
  * Statics
  */
 AdminSchema.statics = {
-
+  /**
+   * Get admin
+   * @param {ObjectId} id - The objectId of user.
+   * @returns {Promise<User, APIError>}
+   */
+  get(id) {
+    return this.findById(id)
+      .exec()
+      .then((admin) => {
+        if (admin) {
+          return admin;
+        }
+        const err = new APIError('No such user exists!', httpStatus.NOT_FOUND);
+        return Promise.reject(err);
+      });
+  }
 };
 
 /**
