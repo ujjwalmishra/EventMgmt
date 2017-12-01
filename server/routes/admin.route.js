@@ -2,6 +2,8 @@ import express from 'express';
 import validate from 'express-validation';
 import paramValidation from '../../config/param-validation';
 import adminCtrl from '../controllers/admin.controller';
+import expressJwt from 'express-jwt';
+import config from '../../config/config';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -13,7 +15,7 @@ router.route('/login')
   .post(adminCtrl.login)
 
 router.route('/create/merchant')
-  .post(adminCtrl.createMerchant);
+  .post(expressJwt({ secret: config.jwtSecret }), adminCtrl.createMerchant);
 
 router.route('/update/merchant')
   .post(adminCtrl.updateMerchant);

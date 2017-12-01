@@ -9,7 +9,8 @@ const Schema = mongoose.Schema;
 const MerchantSchema = new mongoose.Schema({
   email: { 
     type: String, 
-    unique: true 
+    unique: true,
+    required: true
   },
   password:{
     type: String,

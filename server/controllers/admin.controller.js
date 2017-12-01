@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import config from '../../config/config';
 import Admin from '../models/admin.model';
+import Merchant from '../models/merchant.model';
 
 
 function create(req, res, next) {
@@ -62,18 +63,35 @@ function login(req, res, next) {
 }
 
 function createMerchant(req, res, next) {
-  const merchant = new Merchant({
-    email: req.body.email,
-    password: req.body.password,
-    company: req.body.company,
-    mobileNumber: req.body.mobileNumber,
-    userCount: req.body.userCount,
-    eventCount: req.body.eventCount
-  });
 
-  merchant.save()
-    .then(savedMerchant => res.json(savedMerchant))
-    .catch(e => next(e));
+  Admin.findOne({username: req.user.username})
+  .exec()
+  .then((admin) => {
+      console.log("got admin");
+       const merchant = new Merchant({
+        email: req.body.email,
+        password: req.body.password,
+        company: req.body.company,
+        mobileNumber: req.body.mobileNumber,
+        userCount: req.body.userCount,
+        eventCount: req.body.eventCount
+      })
+
+      merchant.save()
+        .then(savedMerchant => {
+                console.log("got merchant");
+          admin.merchants.push(savedMerchant._id);
+          admin.save()
+          .then(admin => res.json(savedMerchant))
+          .catch(e => next(e));
+          
+        }
+        )
+        .catch(e => next(e));
+  })
+  .catch(e => next(e));
+
+
 }
 
 function updateMerchant(req, res, next) {
