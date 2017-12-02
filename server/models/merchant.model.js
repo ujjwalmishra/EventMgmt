@@ -1,6 +1,7 @@
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import httpStatus from 'http-status';
+import bcrypt from 'bcrypt';
 import APIError from '../helpers/APIError';
 const Schema = mongoose.Schema;
 /**
@@ -48,10 +49,37 @@ const MerchantSchema = new mongoose.Schema({
  * - virtuals
  */
 
+MerchantSchema.pre('save', function save(next) {
+  
+    const merchant = this;
+    if (!merchant.isModified('password')) { 
+      return next(); }
+  
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) { 
+        console.log("2nd");
+        return next(err); }
+  
+      bcrypt.hash(merchant.password, salt).then(function(hash) {
+      // Store hash in your password DB.
+        merchant.password = hash;
+        console.log("1st");
+        next();
+      })
+      .catch(() => next(err));
+  
+    });
+  });
+
 /**
  * Methods
  */
 MerchantSchema.method({
+  comparePassword(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+      cb(err, isMatch);
+    })
+  }
 });
 
 /**

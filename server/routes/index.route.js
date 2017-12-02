@@ -2,6 +2,7 @@ import express from 'express';
 import adminRoutes from './admin.route';
 import userRoutes from './user.route';
 import authRoutes from './auth.route';
+import merchantRoutes from './merchant.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -12,6 +13,9 @@ router.get('/health-check', (req, res) =>
 
 // mount admin routes at /admin
 router.use('/admin', adminRoutes);
+
+// mount merchant routes at /merchant
+router.use('/merchant', merchantRoutes);
 
 // mount user routes at /users
 router.use('/users', userRoutes);
