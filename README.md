@@ -28,13 +28,13 @@ To DO:
     p) /event/update/{id}</br>
     q) /event/generate/{id}</br>
     
-  Items</br>
+  3) Items</br>
     a) /merchant/addItem</br>
     b) /merchant/updateitem</br>
     c) /merchant/deleteitem</br>
     d) /merchant/getitems</br>
     
-  Users</br>
+  4) Users</br>
     a) /user/getItems</br>
     b) /user/getOrders</br>
     c) /user/buyItems</br>
@@ -42,7 +42,7 @@ To DO:
     e) /user/getRefund</br>
     f) /merchant/generateUsers -- generate QR codes </br>
   
-  Orders</br>
+  5) Orders</br>
     a) /merchant/orders</br>
     b) /merchant/orders/export --export to csv </br>
   
