@@ -5,6 +5,9 @@ To DO:
     b) Merchant</br>
     c) Ticket</br>
     d) Event</br></strike>
+    e) Items</br>
+    f) Users</br>
+    g) Orders</br>
 2) Create following endpoints:</br>
     <strike>a) /admin/login</br>
     b) /admin/create/merchant - POST</br>
@@ -24,6 +27,27 @@ To DO:
     o) /event/create</br>
     p) /event/update/{id}</br>
     q) /event/generate/{id}</br>
+    
+  Items</br>
+    a) /merchant/addItem</br>
+    b) /merchant/updateitem</br>
+    c) /merchant/deleteitem</br>
+    d) /merchant/getitems</br>
+    
+  Users</br>
+    a) /user/getItems</br>
+    b) /user/getOrders</br>
+    c) /user/buyItems</br>
+    d) /user/buyCredit</br>
+    e) /user/getRefund</br>
+    f) /merchant/generateUsers -- generate QR codes </br>
+  
+  Orders</br>
+    a) /merchant/orders</br>
+    b) /merchant/orders/export --export to csv </br>
+  
+  
+    
 
 
 # Express & mongoose REST API Boilerplate in ES6 with Code Coverage [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
