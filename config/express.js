@@ -14,6 +14,9 @@ import routes from '../server/routes/index.route';
 import config from './config';
 import APIError from '../server/helpers/APIError';
 import session from 'express-session';
+import mongoose from './db';
+
+const MongoStore = require('connect-mongo')(session);
 
 const app = express();
 
@@ -35,6 +38,19 @@ app.use(helmet());
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
 
+app.use(cookieParser());
+
+//session init
+app.use(session({
+  secret: config.SECRET,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: !true }
+}));
+
+console.log("session set");
+
 console.log(config.env);
 
 // enable detailed API logging in dev env
@@ -48,6 +64,8 @@ if (config.env === 'development') {
     colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
   }));
 }
+
+app.use(express.static('public'))
 
 // mount all routes on /api path
 app.use('/api', routes);

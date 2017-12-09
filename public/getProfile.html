@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+
+<form action="/merchant/login">
+  First name:<br>
+  <input type="text" name="username" value="">
+  <br>
+  Last name:<br>
+  <input type="text" name="password" value="">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+
+</body>
+<script type="text/javascript">
+	var auth = { 'authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVnb21pc2hyYUBnbWFpbDEuY29tIiwiaWF0IjoxNTEyNzkxNzkyfQ.7cvkxzTJSk2m_L_NRZYnAaVBkCcZXzu5v_7i3smd7Vs' }
+$.ajax({
+    url: '/api/merchant/profile',
+    type: 'GET',
+    headers: auth,
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    async: false,
+    success: function(msg) {
+        console.log(msg);
+    }
+});
+</script>
+</html>

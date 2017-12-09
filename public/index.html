@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+
+<form action="/merchant/login">
+  First name:<br>
+  <input type="text" name="username" value="">
+  <br>
+  Last name:<br>
+  <input type="text" name="password" value="">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> 
+
+<p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
+
+</body>
+<script type="text/javascript">
+	var arr = { email: 'ugomishra@gmail1.com', password: 'black' };
+$.ajax({
+    url: '/api/merchant/login',
+    type: 'POST',
+    data: JSON.stringify(arr),
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    async: false,
+    success: function(msg) {
+        alert(msg);
+    }
+});
+</script>
+</html>

@@ -18,12 +18,12 @@ import Merchant from '../models/merchant.model';
       .exec()
       .then((merchant) => {
           if(!merchant) {
-              let err = new APIError('No such user exists!', httpStatus.NOT_FOUND);
+              let err = new APIError('No such user exists!',  httpStatus.UNAUTHORIZED, true);
               return next(err);
           }
           merchant.comparePassword(req.body.password, (err, isMatch) => {
             if (err) { 
-                let err = new APIError('No such password exists!', httpStatus.NOT_FOUND);
+                let err = new APIError('No such password exists!',  httpStatus.UNAUTHORIZED, true);
                 return next(err); 
             }
             if (isMatch) {
@@ -33,6 +33,7 @@ import Merchant from '../models/merchant.model';
                     },
                     config.jwtSecret
                 );
+                console.log(req.session);
                 let session = req.session;
                 session.merchant = merchant;
                 return res.json({
@@ -41,7 +42,7 @@ import Merchant from '../models/merchant.model';
                 });
             }
             else {
-                err = new APIError('No such password exists!', httpStatus.NOT_FOUND);
+                err = new APIError('No such password exists!',  httpStatus.UNAUTHORIZED, true);
                 return next(err); 
             }
           });
@@ -73,6 +74,7 @@ function profile(req, res, next) {
           res.json({
             profile: profile
           });
+          console.log("came eher");
 
       })
       .catch(e => next(e));
