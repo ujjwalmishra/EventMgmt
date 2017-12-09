@@ -31,13 +31,13 @@ function login(req, res, next) {
     .exec()
     .then((admin) => {
       if(!admin) {
-        let err = new APIError('No such user exists!', httpStatus.NOT_FOUND);
-        return Promise.reject(err);
+        let err = new APIError('No such user exists!',  httpStatus.UNAUTHORIZED, true);
+        return next(err);
       }
       admin.comparePassword(req.body.password, (err, isMatch) => {
-            if (err) { 
-              let err = new APIError('No such password exists!', httpStatus.NOT_FOUND);
-              return Promise.reject(err); 
+            if (err) {
+              let err = new APIError('No such password exists!',  httpStatus.UNAUTHORIZED, true);
+              return next(err); 
             }
             if (isMatch) {
                   console.log("is a isMatch")
@@ -53,8 +53,8 @@ function login(req, res, next) {
                   });
             }
             else {
-              err = new APIError('No such password exists!', httpStatus.NOT_FOUND);
-              return Promise.reject(err);              
+              err = new APIError('No such password exists!',  httpStatus.UNAUTHORIZED, true);
+              return next(err);              
             }
  
       });      
@@ -62,32 +62,44 @@ function login(req, res, next) {
     .catch(e => next(e));    
 }
 
+
 function createMerchant(req, res, next) {
 
   Admin.findOne({username: req.user.username})
   .exec()
   .then((admin) => {
       console.log("got admin");
-       const merchant = new Merchant({
-        email: req.body.email,
-        password: req.body.password,
-        company: req.body.company,
-        mobileNumber: req.body.mobileNumber,
-        userCount: req.body.userCount,
-        eventCount: req.body.eventCount
-      })
+        Merchant.findOne({ email: req.body.email })
+        .exec()
+        .then((merchant) => {
+          if(!merchant) {
+           const merchant = new Merchant({
+            email: req.body.email,
+            password: req.body.password,
+            company: req.body.company,
+            mobileNumber: req.body.mobileNumber,
+            userCount: req.body.userCount,
+            eventCount: req.body.eventCount
+          })
 
-      merchant.save()
-        .then(savedMerchant => {
-                console.log("got merchant");
-          admin.merchants.push(savedMerchant._id);
-          admin.save()
-          .then(admin => res.json(savedMerchant))
-          .catch(e => next(e));
-          
-        }
-        )
-        .catch(e => next(e));
+          merchant.save()
+            .then(savedMerchant => {
+                    console.log("got merchant");
+              admin.merchants.push(savedMerchant._id);
+              admin.save()
+              .then(admin => res.json(savedMerchant))
+              .catch(e => next(e));
+              
+            }
+            )
+            .catch(e => next(e)); 
+          }
+          else {
+            const err = new APIError('Email id exists already!', httpStatus.CONFLICT);
+            return next(err); 
+          }
+        } )
+
   })
   .catch(e => next(e));
 

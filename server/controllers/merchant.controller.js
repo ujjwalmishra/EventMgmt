@@ -19,12 +19,12 @@ import Merchant from '../models/merchant.model';
       .then((merchant) => {
           if(!merchant) {
               let err = new APIError('No such user exists!', httpStatus.NOT_FOUND);
-              return Promise.reject(err);
+              return next(err);
           }
           merchant.comparePassword(req.body.password, (err, isMatch) => {
             if (err) { 
                 let err = new APIError('No such password exists!', httpStatus.NOT_FOUND);
-                return Promise.reject(err); 
+                return next(err); 
             }
             if (isMatch) {
                 const token = jwt.sign(
@@ -33,6 +33,8 @@ import Merchant from '../models/merchant.model';
                     },
                     config.jwtSecret
                 );
+                let session = req.session;
+                session.merchant = merchant;
                 return res.json({
                     token,
                     email: merchant.email
@@ -40,26 +42,40 @@ import Merchant from '../models/merchant.model';
             }
             else {
                 err = new APIError('No such password exists!', httpStatus.NOT_FOUND);
-                return Promise.reject(err); 
+                return next(err); 
             }
           });
       })
       .catch(e => next(e));
  }
 
+function logout(req, res, next) {
+
+    req.session.merchant = null;
+
+}
+
+
 function profile(req, res, next) {
 
-    Merchant.findOne({email : req.params.merchantEmail})
+    if(!req.session.merchant) {
+      res.redirect('/login');
+    }
+
+    Merchant.findOne({email : req.session.merchant.email})
       .exec()
       .then((merchant) => {
           if(!merchant) {
-            let err = new APIError('No such user exists!', httpStatus.NOT_FOUND);
+            let err = new APIError('No such user exists!',  httpStatus.UNAUTHORIZED, true);
             return Promise.reject(err);
           }
           const profile = merchant.profile;
-          //if(null == profile)
-          //TODO profile implementation
+          res.json({
+            profile: profile
+          });
+
       })
+      .catch(e => next(e));
 
 }
 

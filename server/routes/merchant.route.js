@@ -8,10 +8,10 @@ import merchantCtrl from '../controllers/merchant.controller';
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/login')
-/** POST /api/admin/login - login admin */
+/** POST /api/merchant/login - login admin */
 .post(merchantCtrl.login);
 
-router.route('/profile/:merchantEmail')
+router.route('/profile')
 /** get /api/merchant/profile - merchant profile */
 .get(expressJwt({ secret: config.jwtSecret }), merchantCtrl.profile);
 

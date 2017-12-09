@@ -4,6 +4,8 @@ import util from 'util';
 // config should be imported before importing any other file
 import config from './config/config';
 import app from './config/express';
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
@@ -19,6 +21,12 @@ mongoose.connect(mongoUri, { server: { socketOptions: { keepAlive: 1 } } });
 mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoUri}`);
 });
+
+//session init
+app.use(session({
+	secret: config.SECRET,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
 
 // print mongoose logs in dev env
 if (config.MONGOOSE_DEBUG) {

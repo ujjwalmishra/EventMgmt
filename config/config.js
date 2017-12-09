@@ -38,7 +38,8 @@ const config = {
   mongo: {
     host: envVars.MONGO_HOST,
     port: envVars.MONGO_PORT
-  }
+  },
+  SECRET: "asdsadasds"
 };
 
 export default config;
