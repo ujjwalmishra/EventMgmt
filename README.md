@@ -3,19 +3,18 @@ To DO:
 1) Create following models:</br>
     <strike>a)Super Admin</br>
     b) Merchant</br>
-    c) Ticket</br>
-    d) Event</br></strike>
+    c) Ticket -- analogous to user</br> 
+    d) Event</br>
     e) Items</br>
-    f) Users</br>
-    g) Orders</br>
+    g) Orders</br></strike>
 2) Create following endpoints:</br>
     <strike>a) /admin/login</br>
     b) /admin/create/merchant - POST</br>
     c) /admin/update/merchant - POST/UPDATE</br>
     d) /admin/delete/merchant - DELETE</br>
-    e) /admin/list/merchant - GET</br></strike>
+    e) /admin/list/merchant - GET</br>
     f) /merchant/login</br>
-    g) /merchant/profile</br>
+    g) /merchant/profile</br></strike>
     h) /merchant/profile/update</br>
     i) /merchant/resetpassword</br>
     j) /merchant/updatepassword</br>
@@ -34,13 +33,13 @@ To DO:
     c) /merchant/deleteitem</br>
     d) /merchant/getitems</br>
     
-  4) Users</br>
-    a) /user/getItems</br>
-    b) /user/getOrders</br>
-    c) /user/buyItems</br>
-    d) /user/buyCredit</br>
-    e) /user/getRefund</br>
-    f) /merchant/generateUsers -- generate QR codes </br>
+  4) Tickets</br>
+    a) /ticket/getItems</br>
+    b) /ticket/getOrders</br>
+    c) /ticket/buyItems</br>
+    d) /ticket/buyCredit</br>
+    e) /ticket/getRefund</br>
+    f) /merchant/generateTickets -- generate QR codes </br>
   
   5) Orders</br>
     a) /merchant/orders</br>

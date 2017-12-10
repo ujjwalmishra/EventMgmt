@@ -7,11 +7,7 @@ const Schema = mongoose.Schema;
 /**
  * Ticket Schema
  */
-const TicketSchema = new mongoose.Schema({
-  serialName: {
-    type: String,
-    required: true
-  },
+const OrderSchema = new mongoose.Schema({
   merchant: { 
     type: Schema.Types.ObjectId, 
     ref: 'Merchant' 
@@ -20,16 +16,13 @@ const TicketSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId, 
     ref: 'Event' 
   },
-  totalCredit: Number,
-  creditHistory: { type : Array , "default" : [] }, //array of all credit addition {time, amount}
-  qrCodePath: String,
-  publicKey: {
-    type: String, 
-    required: true
+  ticket: {
+    type: Schema.Types.ObjectId, 
+    ref: 'Event'
   },
-  privateKey: {
-    type: String, 
-    required: true
+  items: {
+    type: Array,
+    default: []
   },
   createdAt: {
     type: Date,

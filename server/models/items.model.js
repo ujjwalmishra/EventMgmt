@@ -5,33 +5,33 @@ import APIError from '../helpers/APIError';
 
 const Schema = mongoose.Schema;
 /**
- * Ticket Schema
+ * Event Schema
  */
-const TicketSchema = new mongoose.Schema({
-  serialName: {
+const ItemSchema = new mongoose.Schema({
+  itemName: {
     type: String,
-    required: true
+    required: true,
+    index: { unique: true } 
   },
   merchant: { 
     type: Schema.Types.ObjectId, 
     ref: 'Merchant' 
   },
-  event: { 
+  event: {
     type: Schema.Types.ObjectId, 
-    ref: 'Event' 
+    ref: 'Event'
   },
-  totalCredit: Number,
-  creditHistory: { type : Array , "default" : [] }, //array of all credit addition {time, amount}
-  qrCodePath: String,
-  publicKey: {
-    type: String, 
+  itemPrice: {
+    type: Number,
     required: true
   },
-  privateKey: {
-    type: String, 
-    required: true
-  },
+  itemImage: String,
+  itemCount: Number,
   createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  modifiedAt: {
     type: Date,
     default: Date.now
   }
@@ -47,17 +47,17 @@ const TicketSchema = new mongoose.Schema({
 /**
  * Methods
  */
-TicketSchema.method({
+ItemSchema.method({
 });
 
 /**
  * Statics
  */
-TicketSchema.statics = {
+ItemSchema.statics = {
 
 };
 
 /**
- * @typedef Ticket
+ * @typedef Event
  */
-export default mongoose.model('Ticket', TicketSchema);
+export default mongoose.model('Item', ItemSchema);
