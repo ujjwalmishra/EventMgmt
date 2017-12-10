@@ -14,18 +14,15 @@ To DO:
     d) /admin/delete/merchant - DELETE</br>
     e) /admin/list/merchant - GET</br>
     f) /merchant/login</br>
-    g) /merchant/profile</br></strike>
+    g) /merchant/profile</br>
     h) /merchant/profile/update</br>
     i) /merchant/resetpassword</br>
-    j) /merchant/updatepassword</br>
+    j) /merchant/updatepassword</br></strike>
     k) /merchant/create/event</br>
     l) /merchant/update/event</br>
     m) /merchant/delete/event</br>
-    n) /merchant/list</br>
-    n.1) /merchant/upload/template
-    o) /event/create</br>
-    p) /event/update/{id}</br>
-    q) /event/generate/{id}</br>
+    n) /merchant/list/event</br>
+    o) /merchant/upload/template</br>
     
   3) Items</br>
     a) /merchant/addItem</br>
@@ -33,7 +30,7 @@ To DO:
     c) /merchant/deleteitem</br>
     d) /merchant/getitems</br>
     
-  4) Tickets</br>
+  4) Tickets -- is equivalent to user</br>
     a) /ticket/getItems</br>
     b) /ticket/getOrders</br>
     c) /ticket/buyItems</br>
