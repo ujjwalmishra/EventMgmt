@@ -39,7 +39,17 @@ const config = {
     host: envVars.MONGO_HOST,
     port: envVars.MONGO_PORT
   },
-  SECRET: "asdsadasds"
+  SECRET: "asdsadasds",
+  mailer: {
+    options: {
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+          user: 'aslokof2suvn2pba@ethereal.email',
+          pass: 'JkfnjRYDvrDqMhwUns'
+      }
+    }
+  }
 };
 
 export default config;

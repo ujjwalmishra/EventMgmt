@@ -19,7 +19,6 @@ const MerchantSchema = new mongoose.Schema({
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
-  tokens: Array,
   company: {
     type:String,
     required: true
@@ -36,9 +35,9 @@ const MerchantSchema = new mongoose.Schema({
   ],
   profile: {
     name: String,
-    location: String,
-    website: String,
-    picture: String
+    contact: {
+      type: String
+    }
   }
 });
 

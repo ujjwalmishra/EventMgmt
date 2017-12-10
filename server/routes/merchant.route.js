@@ -15,13 +15,17 @@ router.route('/profile')
 /** get /api/merchant/profile - merchant profile */
 .get(expressJwt({ secret: config.jwtSecret }), merchantCtrl.profile);
 
-router.route('/profile/update')
+router.route('/profile')
 /** POST /api/merchant/profile/update - merchant profile update */
 .post(expressJwt({ secret: config.jwtSecret }), merchantCtrl.updateProfile);
 
 router.route('/resetpassword')
 /** POST /api/merchant/resetpassword - merchant password reset */
-.post(expressJwt({ secret: config.jwtSecret }), merchantCtrl.resetPasswrd);
+.post(merchantCtrl.resetPasswrdToken);
+
+router.route('/reset/:token')
+.get(merchantCtrl.verifyResetToken)
+.post(merchantCtrl.resetPassword);
 
 router.route('/updatepassword')
 /** POST /api/merchant/updatepassword - merchant password update */

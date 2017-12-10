@@ -15,6 +15,8 @@ import config from './config';
 import APIError from '../server/helpers/APIError';
 import session from 'express-session';
 import mongoose from './db';
+import hbs from 'express-hbs';
+import path from 'path';
 
 const MongoStore = require('connect-mongo')(session);
 
@@ -49,9 +51,6 @@ app.use(session({
     cookie: { secure: !true }
 }));
 
-console.log("session set");
-
-console.log(config.env);
 
 // enable detailed API logging in dev env
 if (config.env === 'development') {
@@ -65,7 +64,14 @@ if (config.env === 'development') {
   }));
 }
 
-app.use(express.static('public'))
+app.use(express.static('public'));
+
+
+app.engine('server.html', hbs.express4({
+  extname: '.server.html'
+}));
+app.set('view engine', 'server.html');
+app.set('views', path.resolve('./'));
 
 // mount all routes on /api path
 app.use('/api', routes);
