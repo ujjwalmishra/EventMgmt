@@ -74,7 +74,6 @@ function resizeQr(eventId, length) {
     )
     .catch( (e) => 
       {
-        console.log(e);
         status = false;
       });
   }

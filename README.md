@@ -34,9 +34,9 @@ To DO:
     <strike>a) /ticket/getItems -- not needed</br>
     b) /ticket/getOrders</br>
     c) /ticket/buyItems</br>
-    d) /ticket/buyCredit</br></strike>
+    d) /ticket/buyCredit</br>
     e) /ticket/getRefund</br>
-    f) /merchant/generateTickets -- generate QR codes </br>
+    f) /merchant/generateTickets -- generate QR codes </br></strike>
   
   5) Orders</br>
     a) /merchant/orders</br>
