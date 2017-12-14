@@ -91,9 +91,10 @@ function generateTickets(req, res, next) {
   const tickets = qrgen.generateTickets(ticketCount); // return public private keys 
   const ticketQrs = qrgen.generateQR(tickets); // return QR images path
 
-  //generate ticket documents
-   arr = [{ name: 'Star Wars' }, { name: 'The Empire Strikes Back' }];
-Movies.insertMany(arr, function(error, docs) {});
+  console.log(ticketQrs);
+//   //generate ticket documents
+//    arr = [{ name: 'Star Wars' }, { name: 'The Empire Strikes Back' }];
+// Movies.insertMany(arr, function(error, docs) {});
 
 }
 
