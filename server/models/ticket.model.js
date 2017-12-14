@@ -8,10 +8,6 @@ const Schema = mongoose.Schema;
  * Ticket Schema
  */
 const TicketSchema = new mongoose.Schema({
-  serialName: {
-    type: String,
-    required: true
-  },
   merchant: { 
     type: Schema.Types.ObjectId, 
     ref: 'Merchant' 

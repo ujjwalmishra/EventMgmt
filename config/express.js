@@ -64,6 +64,19 @@ if (config.env === 'development') {
   }));
 }
 
+//prevent un auth access to qr codes
+app.use(function(req, res, next) {
+  
+    if (req.session.merchant == null && req.path.indexOf('/codes') === 0)
+    {
+        res.json({"msg": "UnAuth"});
+    }
+    else{
+      next();   
+    }
+    
+});
+
 app.use(express.static('public'));
 
 

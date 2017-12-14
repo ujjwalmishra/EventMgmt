@@ -14,12 +14,14 @@ router.route('/login')
 /** POST /api/merchant/login - login admin */
 .post(merchantCtrl.login);
 
-router.route('/profile')
-/** get /api/merchant/profile - merchant profile */
-.get(expressJwt({ secret: config.jwtSecret }), merchantCtrl.profile);
+router.route('/logout')
+/** POST /api/merchant/login - login admin */
+.get(merchantCtrl.logout);
 
 router.route('/profile')
-/** POST /api/merchant/profile/update - merchant profile update */
+/** get /api/merchant/profile - merchant profile */
+.get(expressJwt({ secret: config.jwtSecret }), merchantCtrl.profile)
+/** POST /api/merchant/profile - merchant profile update */
 .post(expressJwt({ secret: config.jwtSecret }), merchantCtrl.updateProfile);
 
 router.route('/resetpassword')
@@ -45,6 +47,9 @@ router.route('/select/event/:eventId')
 //generate QR codes for a event
 router.route('/generateTickets')
 .post(expressJwt({ secret: config.jwtSecret }), ticketCtrl.generateTickets);
+
+router.route('/getTickets')
+.post(expressJwt({ secret: config.jwtSecret }), ticketCtrl.getQrCodes);
 
 
 export default router;

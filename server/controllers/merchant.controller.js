@@ -60,6 +60,8 @@ function logout(req, res, next) {
 
     req.session.merchant = null;
 
+    res.json({"msg" : "UnAuth"});
+
 }
 
 
@@ -93,7 +95,7 @@ function profile(req, res, next) {
 function updateProfile(req, res, next) {
 
   if(!req.session.merchant) {
-    res.redirect('/login');
+    return res.json({"msg": "Merchant not logged in"});
   }
 
   Merchant.findByIdAndUpdate(req.session.merchant._id, { $set: { 
@@ -288,4 +290,4 @@ function updatePasswrd(req, res, next) {
 
 
 
- export default { login, profile, updateProfile, resetPasswrdToken, verifyResetToken, resetPassword, updatePasswrd };
+ export default { login, profile, updateProfile, logout, resetPasswrdToken, verifyResetToken, resetPassword, updatePasswrd };

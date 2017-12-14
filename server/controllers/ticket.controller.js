@@ -89,9 +89,30 @@ function generateTickets(req, res, next) {
 
   const ticketCount = req.body.ticketCount;
   const tickets = qrgen.generateTickets(ticketCount); // return public private keys 
-  const ticketQrs = qrgen.generateQR(tickets); // return QR images path
+  const ticketQrs = qrgen.generateQR(tickets, req.body.eventId); // return QR images path
 
-  console.log(ticketQrs);
+  const ticketDocuments = [];
+  for(let i=0; i < tickets.length; i++) {
+    tickets[i].qr = ticketQrs[i];
+    let ticketDocument = {};
+    ticketDocument.merchant = req.session.merchant._id;
+    ticketDocument.event = req.body.eventId;
+    ticketDocument.totalCredit = req.body.totalCredit || 100;
+    ticketDocument.creditHistory = [100];
+    ticketDocument.qrCodePath = ticketQrs[i];
+    ticketDocument.publicKey = tickets[i].publicKey;
+    ticketDocument.privateKey = tickets[i].secretKey;
+    ticketDocuments.push(ticketDocument);
+  }
+
+  Ticket.insertMany(ticketDocuments, function(error, docs) {
+    
+    if(error) {
+     return next(error);
+    };
+    res.json({"msg": "Success"});
+
+  });
 //   //generate ticket documents
 //    arr = [{ name: 'Star Wars' }, { name: 'The Empire Strikes Back' }];
 // Movies.insertMany(arr, function(error, docs) {});
@@ -99,5 +120,11 @@ function generateTickets(req, res, next) {
 }
 
 
+function getQrCodes(req, res, next) {
 
- export default { getOrders, buyItems, buyCredit, generateTickets};
+  return res.json(qrgen.retrieveQr(req.body.eventId, req.body.count));
+
+}
+
+
+ export default { getOrders, buyItems, buyCredit, generateTickets, getQrCodes};

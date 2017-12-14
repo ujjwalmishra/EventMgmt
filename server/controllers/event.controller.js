@@ -11,15 +11,6 @@ import crypto from 'crypto';
 import path from 'path';
 
 
-/**
- * Returns jwt token if valid username and password is provided
- * @param req
- * @param res
- * @param next
- * @returns {*}
- */
-
-
 function createEvent(req, res, next) {
     
     const event = new Event({
@@ -37,7 +28,7 @@ function createEvent(req, res, next) {
       .then(eventObj => {
           Merchant.findByIdAndUpdate({_id:req.session.merchant._id},{$push: {events: eventObj._id}})
             .exec().then(merchObj => {
-              res.json({"message":"Event saved"});
+              res.json({"message":"Event saved", "eventId": eventObj._id});
             })
             //todo add organizer details in merchant/event
             .catch(e => {
