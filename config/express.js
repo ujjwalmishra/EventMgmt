@@ -17,7 +17,6 @@ import session from 'express-session';
 import mongoose from './db';
 import hbs from 'express-hbs';
 import path from 'path';
-import nacl from 'tweetnacl';
 
 const MongoStore = require('connect-mongo')(session);
 
@@ -34,8 +33,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compress());
 app.use(methodOverride());
-
-console.log(nacl.box.keyPair().secretKey.toString());
 
 // secure apps by setting various HTTP headers
 app.use(helmet());

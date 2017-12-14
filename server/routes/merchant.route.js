@@ -5,6 +5,7 @@ import expressJwt from 'express-jwt';
 import config from '../../config/config';
 import merchantCtrl from '../controllers/merchant.controller';
 import eventCtrl from '../controllers/event.controller';
+import ticketCtrl from '../controllers/ticket.controller'
 
 
 const router = express.Router(); // eslint-disable-line new-cap
@@ -40,6 +41,10 @@ router.route('/create/event')
 //returns json for items in event
 router.route('/select/event/:eventId')
 .get(expressJwt({ secret: config.jwtSecret }), eventCtrl.getEvent);
+
+//generate QR codes for a event
+router.route('/generateTickets')
+.post(expressJwt({ secret: config.jwtSecret }), ticketCtrl.generateTickets);
 
 
 export default router;

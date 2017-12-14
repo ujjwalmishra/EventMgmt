@@ -5,7 +5,7 @@ import config from '../../config/config';
 import Ticket from '../models/ticket.model';
 import Order from '../models/order.model';
 import Item from '../models/item.model';
-import path from 'path';
+import qrgen from '../qrcodes/qrcodegenerator';
 import Transaction from 'mongoose-transactions';
 
 
@@ -82,6 +82,18 @@ function buyCredit(req, res, next) {
   Ticket.findOneAndUpdate({_id : req.body.ticketId}, {$inc : {'totalCredit' : req.body.topUpAmount}}).exec()
   .then(() => res.json({"msg": "updated succuessfully"}))
   .catch((e) => next(e));
+
+}
+
+function generateTickets(req, res, next) {
+
+  const ticketCount = req.body.ticketCount;
+  const tickets = qrgen.generateTickets(ticketCount); // return public private keys 
+  const ticketQrs = qrgen.generateQR(tickets); // return QR images path
+
+  //generate ticket documents
+   arr = [{ name: 'Star Wars' }, { name: 'The Empire Strikes Back' }];
+Movies.insertMany(arr, function(error, docs) {});
 
 }
 
