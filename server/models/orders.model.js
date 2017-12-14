@@ -40,17 +40,25 @@ const OrderSchema = new mongoose.Schema({
 /**
  * Methods
  */
-TicketSchema.method({
+OrderSchema.method({
 });
 
 /**
  * Statics
  */
-TicketSchema.statics = {
+OrderSchema.statics = {
+
+    list({ticketId, skip = 0, limit = 50 } = {}) {
+    return this.find({ticket : ticketId})
+      .sort({ createdAt: -1 })
+      .skip(+skip)
+      .limit(+limit)
+      .exec();
+  }
 
 };
 
 /**
- * @typedef Ticket
+ * @typedef Order
  */
-export default mongoose.model('Ticket', TicketSchema);
+export default mongoose.model('Order', OrderSchema);

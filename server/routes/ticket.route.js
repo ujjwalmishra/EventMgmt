@@ -12,7 +12,7 @@ router.route('/getItems')
 /** GET /api/ticket/getItems - get items avaialable for purchase */
 .get(expressJwt({ secret: config.jwtSecret }), ticketCtrl.getItems);
 
-router.route('/getOrders')
+router.route('/getOrders/:ticketId')
 /** GET /api/ticket/getOrders - get past orders */
 .get(expressJwt({ secret: config.jwtSecret }), ticketCtrl.getOrders);
 

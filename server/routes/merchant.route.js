@@ -36,5 +36,10 @@ router.route('/updatepassword')
 router.route('/create/event')
 .post(expressJwt({ secret: config.jwtSecret }), eventCtrl.createEvent);
 
+//Select a event from list for mobile app
+//returns json for items in event
+router.route('/select/event/:eventId')
+.get(expressJwt({ secret: config.jwtSecret }), eventCtrl.getEvent);
+
 
 export default router;

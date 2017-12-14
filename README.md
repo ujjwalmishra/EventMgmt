@@ -31,10 +31,10 @@ To DO:
     d) /merchant/getitems</br>
     
   4) Tickets -- is equivalent to user</br>
-    a) /ticket/getItems</br>
+    <strike>a) /ticket/getItems -- not needed</br>
     b) /ticket/getOrders</br>
     c) /ticket/buyItems</br>
-    d) /ticket/buyCredit</br>
+    d) /ticket/buyCredit</br></strike>
     e) /ticket/getRefund</br>
     f) /merchant/generateTickets -- generate QR codes </br>
   

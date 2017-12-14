@@ -287,4 +287,5 @@ function updatePasswrd(req, res, next) {
 }
 
 
+
  export default { login, profile, updateProfile, resetPasswrdToken, verifyResetToken, resetPassword, updatePasswrd };

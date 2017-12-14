@@ -55,6 +55,20 @@ ItemSchema.method({
  */
 ItemSchema.statics = {
 
+    /**
+   * List items for a event in descending order of 'createdAt' timestamp.
+   * @param {number} skip - Number of items to be skipped.
+   * @param {number} limit - Limit number of itemss to be returned.
+   * @returns {Promise<Item[]>}
+   */
+  list({eventId, skip = 0, limit = 50 } = {}) {
+    return this.find({event: eventId})
+      .sort({ createdAt: -1 })
+      .skip(+skip)
+      .limit(+limit)
+      .exec();
+  }
+
 };
 
 /**

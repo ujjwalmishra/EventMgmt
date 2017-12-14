@@ -4,6 +4,7 @@ import APIError from '../helpers/APIError';
 import config from '../../config/config';
 import Merchant from '../models/merchant.model';
 import Event from '../models/event.model';
+import Item from '../models/item.model';
 import nodemailer from 'nodemailer';
 import async from 'async';
 import crypto from 'crypto';
@@ -31,7 +32,7 @@ function createEvent(req, res, next) {
         eventDescription: req.body.eventDescription,
         ticketCount: req.body.ticketCount,
         createdAt: req.body.createdAt
-    })
+    });
     event.save()
       .then(eventObj => {
           Merchant.findByIdAndUpdate({_id:req.session.merchant._id},{$push: {events: eventObj._id}})
@@ -51,49 +52,58 @@ function createEvent(req, res, next) {
             res.json({"message": "Event save failed"})})
     }
     
-    function updateMerchant(req, res, next) {
-      Merchant.findByIdAndUpdate(req.body.id, { $set: { 
-        email: req.body.email,
-        password: req.body.password,
-        company: req.body.company,
-        mobileNumber: req.body.mobileNumber,
-        userCount: req.body.userCount,
-        eventCount: req.body.eventCount
-      }}, { new: true }, function (err, merchant) {
-        if (err) return next(err);
-        res.send(merchant);
-      });
-    }
+function updateMerchant(req, res, next) {
+  Merchant.findByIdAndUpdate(req.body.id, { $set: { 
+    email: req.body.email,
+    password: req.body.password,
+    company: req.body.company,
+    mobileNumber: req.body.mobileNumber,
+    userCount: req.body.userCount,
+    eventCount: req.body.eventCount
+  }}, { new: true }, function (err, merchant) {
+    if (err) return next(err);
+    res.send(merchant);
+  });
+}
     
-    function deleteMerchant(req, res, next) {
-      const merchantId = req.body.merchantId;
-      if(merchantId == null) {
-        const err = new APIError('Provide a id!', httpStatus.NOT_FOUND);
-        return next(err); 
-      }
-      Merchant.find({ _id: merchantId })
-      .remove()
-      .exec()
-      .then(deletedMerchant => {
-        Admin.findOne({username: req.user.username})
-        .exec()
-        .then((admin) => {
-          admin.merchants.pull(merchantId);
-          admin.save()
-          .then(admin => res.json(deletedMerchant))
-          .catch(e => next(e));
-        })
-      })
-      .catch(e => next(e))
-    }
+function deleteMerchant(req, res, next) {
+  const merchantId = req.body.merchantId;
+  if(merchantId == null) {
+    const err = new APIError('Provide a id!', httpStatus.NOT_FOUND);
+    return next(err); 
+  }
+  Merchant.find({ _id: merchantId })
+  .remove()
+  .exec()
+  .then(deletedMerchant => {
+    Admin.findOne({username: req.user.username})
+    .exec()
+    .then((admin) => {
+      admin.merchants.pull(merchantId);
+      admin.save()
+      .then(admin => res.json(deletedMerchant))
+      .catch(e => next(e));
+    })
+  })
+  .catch(e => next(e))
+}
     
-    function getMerchants(req, res, next) {
-      const { limit = 50, skip = 0 } = req.query;
-      Merchant.list({ limit, skip })
-        .then(merchants => res.json(merchants))
-        .catch(e => next(e));
-    }
+function getMerchants(req, res, next) {
+  const { limit = 50, skip = 0 } = req.query;
+  Merchant.list({ limit, skip })
+    .then(merchants => res.json(merchants))
+    .catch(e => next(e));
+}
+
+
+function getEvent() {
+
+  Item.list({ req.params.eventId })
+    .then(items => res.json(items))
+    .catch(e => next(e));
+
+}
 
 
 
- export default { createEvent };
+ export default { createEvent, getEvent};
