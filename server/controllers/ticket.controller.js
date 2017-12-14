@@ -3,8 +3,8 @@ import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import config from '../../config/config';
 import Ticket from '../models/ticket.model';
-import Order from '../models/order.model';
-import Item from '../models/item.model';
+import Order from '../models/orders.model';
+import Item from '../models/items.model';
 import qrgen from '../qrcodes/qrcodegenerator';
 import Transaction from 'mongoose-transactions';
 
@@ -12,7 +12,7 @@ import Transaction from 'mongoose-transactions';
 
 function getOrders(req, res, next) {
 
-    Order.list({ req.params.ticketId })
+    Order.list({ _id: req.params.ticketId })
     .then(orders => res.json(orders))
     .catch(e => next(e));
 
@@ -57,7 +57,7 @@ function buyItems(req, res, next) {
         itemArray.forEach((elem) => {
         
           let itemObj = {
-            itemCount: elem.updatedItemCount;  // right now invenotry is unlimited, but in limited invenroty case need to check avaialable qty before proceeding further. Items might have sold out and invenorty is 0
+            itemCount: elem.updatedItemCount  // right now invenotry is unlimited, but in limited invenroty case need to check avaialable qty before proceeding further. Items might have sold out and invenorty is 0
           };
 
           transaction.update('Item', elem.itemId, itemObj);
@@ -100,4 +100,4 @@ function generateTickets(req, res, next) {
 
 
 
- export default { getOrders, buyItems, buyCredit};
+ export default { getOrders, buyItems, buyCredit, generateTickets};

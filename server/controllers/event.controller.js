@@ -4,7 +4,7 @@ import APIError from '../helpers/APIError';
 import config from '../../config/config';
 import Merchant from '../models/merchant.model';
 import Event from '../models/event.model';
-import Item from '../models/item.model';
+import Item from '../models/items.model';
 import nodemailer from 'nodemailer';
 import async from 'async';
 import crypto from 'crypto';
@@ -98,7 +98,7 @@ function getMerchants(req, res, next) {
 
 function getEvent() {
 
-  Item.list({ req.params.eventId })
+  Item.list({_id: req.params.eventId })
     .then(items => res.json(items))
     .catch(e => next(e));
 

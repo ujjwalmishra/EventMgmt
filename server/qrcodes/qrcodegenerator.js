@@ -8,7 +8,7 @@ function generateTickets(qty) {
 
   let keysArray = [];
   
-  for(int i=0; i < qty; i++) {
+  for(let i=0; i < qty; i++) {
     let keys = nacl.box.keyPair();
     let stringifyKeys = {
       publicKey: keys.publicKey.toString(),
@@ -26,7 +26,7 @@ function generateQR(keys) {
 
   let svgPaths = [];
 
-  for(int i=0; i < keys.length; i++) {
+  for(let i=0; i < keys.length; i++) {
   
     let svjObj = qr.svgObject('keys.secretKey');
     svgPaths.push(svjObj);
@@ -39,4 +39,4 @@ function generateQR(keys) {
 
 
 
- export default { createEvent, getEvent};
+ export default { generateTickets, generateQR};
