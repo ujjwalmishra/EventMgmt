@@ -93,10 +93,9 @@ function deleteEvent(req, res, next) {
         .catch(e => res.json(e))
   }
     
-function getMerchants(req, res, next) {
-  const { limit = 50, skip = 0 } = req.query;
-  Merchant.list({ limit, skip })
-    .then(merchants => res.json(merchants))
+function listEvents(req, res, next) {
+  Event.find({"merchant":req.session.merchant._id}).exec()
+    .then(events => res.json(events))
     .catch(e => next(e));
 }
 
@@ -111,4 +110,4 @@ function getEvent() {
 
 
 
- export default { createEvent, updateEvent, deleteEvent, getEvent};
+ export default { createEvent, updateEvent, deleteEvent, listEvents, getEvent};
