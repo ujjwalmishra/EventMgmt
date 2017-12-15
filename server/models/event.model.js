@@ -44,6 +44,7 @@ eventName: {
  * Methods
  */
 EventSchema.method({
+  
 });
 
 /**

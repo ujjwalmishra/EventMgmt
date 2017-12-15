@@ -10,8 +10,7 @@ const Schema = mongoose.Schema;
 const ItemSchema = new mongoose.Schema({
   itemName: {
     type: String,
-    required: true,
-    index: { unique: true } 
+    required: true
   },
   merchant: { 
     type: Schema.Types.ObjectId, 

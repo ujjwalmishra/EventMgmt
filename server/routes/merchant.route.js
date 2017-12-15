@@ -5,7 +5,8 @@ import expressJwt from 'express-jwt';
 import config from '../../config/config';
 import merchantCtrl from '../controllers/merchant.controller';
 import eventCtrl from '../controllers/event.controller';
-import ticketCtrl from '../controllers/ticket.controller'
+import ticketCtrl from '../controllers/ticket.controller';
+import itemCtrl from '../controllers/item.controller';
 
 
 const router = express.Router(); // eslint-disable-line new-cap
@@ -56,6 +57,10 @@ router.route('/generateTickets')
 
 router.route('/getTickets')
 .post(expressJwt({ secret: config.jwtSecret }), ticketCtrl.getQrCodes);
+
+//Item routes
+router.route('/addItem')
+.post(expressJwt({ secret: config.jwtSecret }), itemCtrl.addItem);
 
 
 export default router;
