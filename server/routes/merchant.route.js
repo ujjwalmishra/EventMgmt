@@ -62,5 +62,17 @@ router.route('/getTickets')
 router.route('/addItem')
 .post(expressJwt({ secret: config.jwtSecret }), itemCtrl.addItem);
 
+router.route('/updateItem')
+.post(expressJwt({ secret: config.jwtSecret }), itemCtrl.updateItem);
+
+router.route('/updateItemImage')
+.post(expressJwt({ secret: config.jwtSecret }), itemCtrl.uploadImageItem);
+
+router.route('/removeItem')
+.post(expressJwt({ secret: config.jwtSecret }), itemCtrl.removeItem );
+
+router.route('/getItems/:eventId')
+.get(expressJwt({ secret: config.jwtSecret }), itemCtrl.getItems);
+
 
 export default router;
