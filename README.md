@@ -17,9 +17,9 @@ To DO:
     g) /merchant/profile</br>
     h) /merchant/profile/update</br>
     i) /merchant/resetpassword</br>
-    j) /merchant/updatepassword</br></strike>
+    j) /merchant/updatepassword</br>
     k) /merchant/create/event</br>
-    l) /merchant/update/event</br>
+    l) /merchant/update/event</br></strike>
     m) /merchant/delete/event</br>
     n) /merchant/list/event</br>
     o) /merchant/upload/template</br>
