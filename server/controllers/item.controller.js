@@ -41,24 +41,69 @@ function addItem(req, res, next) {
 
         item.save()
         .then(item => {
-          res.json({"img": status, "data": "OK" });
+          res.json({"img": status, "data": item });
         })
         .catch( (e) => 
-          {console.log(e);next(e);})
+          {next(e)})
     }
 
   });
 
 }
 
-function getOrders(req, res, next) {
+function updateItem(req, res, next) {
+  const updateObj = req.body.itemUpdate;
+  Item.findByIdAndUpdate(req.body.itemId, { $set: updateObj}, {'new': true}, function(err, doc) {
+    if(err) {
+      res.json({"msg": "failed"})
+    }
+    res.json(doc);
+  });
+}
 
-    Order.list({ _id: req.params.ticketId })
-    .then(orders => res.json(orders))
+function uploadImageItem(req, res, next) {
+
+  upload(req, res, function(err) {
+    if(err) {
+      console.log(err);
+      res.json({"msg": "failed"})
+    }
+    else {
+        Item.findByIdAndUpdate(req.body.itemId, { $set: {'itemImage' : req.file.filename }}, {'new': true}, function(err, doc) {
+          if(err) {
+            res.json({"msg": "failed"})
+          }
+          res.json(doc);
+        });
+    }
+
+  });
+
+
+}
+
+function removeItem(req, res, next) {
+
+  Item.findByIdAndRemove(req.body.itemId, function(err, response) {
+
+    if(err) {
+      res.json({"msg": "failed"})
+    }
+
+    res.json(response);
+
+  })
+
+}
+
+function getItems(req, res, next) {
+
+    Item.list({ _id: req.params.eventId })
+    .then(items => res.json(items))
     .catch(e => next(e));
 
 }
 
 
 
- export default { addItem };
+ export default { addItem, updateItem, uploadImageItem, removeItem, getItems};

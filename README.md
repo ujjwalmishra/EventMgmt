@@ -25,10 +25,10 @@ To DO:
     o) /merchant/upload/template</br>
     
   3) Items</br>
-    a) /merchant/addItem</br>
+    <strike>a) /merchant/addItem</br>
     b) /merchant/updateitem</br>
     c) /merchant/deleteitem</br>
-    d) /merchant/getitems</br>
+    d) /merchant/getitems</br></strike>
     
   4) Tickets -- is equivalent to user</br>
     <strike>a) /ticket/getItems -- not needed</br>
@@ -39,7 +39,7 @@ To DO:
     f) /merchant/generateTickets -- generate QR codes </br></strike>
   
   5) Orders</br>
-    a) /merchant/orders</br>
+    a) /merchant/order/:ticketId</br>
     b) /merchant/orders/export --export to csv </br>
   
   
