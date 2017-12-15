@@ -37,7 +37,13 @@ router.route('/updatepassword')
 .post(expressJwt({ secret: config.jwtSecret }), merchantCtrl.updatePasswrd);
 
 router.route('/create/event')
+/*** POST /api/merchant/create/event - to create a new event */
 .post(expressJwt({ secret: config.jwtSecret }), eventCtrl.createEvent);
+
+router.route('/update/event')
+/*** POST /api/merchant/update/event - to update an existing event */
+.post(expressJwt({ secret: config.jwtSecret }), eventCtrl.updateEvent);
+
 
 //Select a event from list for mobile app
 //returns json for items in event

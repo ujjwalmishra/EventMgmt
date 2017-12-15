@@ -43,18 +43,21 @@ function createEvent(req, res, next) {
             res.json({"message": "Event save failed"})})
     }
     
-function updateMerchant(req, res, next) {
-  Merchant.findByIdAndUpdate(req.body.id, { $set: { 
-    email: req.body.email,
-    password: req.body.password,
-    company: req.body.company,
-    mobileNumber: req.body.mobileNumber,
-    userCount: req.body.userCount,
-    eventCount: req.body.eventCount
-  }}, { new: true }, function (err, merchant) {
-    if (err) return next(err);
-    res.send(merchant);
-  });
+function updateEvent(req, res, next) {
+  Event.findOneAndUpdate({"eventName":req.body.eventName}, { $set: { 
+    eventName: req.body.eventName,
+    merchant: req.session.merchant._id,
+    eventStartTime: req.body.eventStartTime,
+    eventEndTime: req.body.eventEndTime,
+    eventVenue: req.body.eventVenue,
+    ticketCategory: req.body.ticketCategory,
+    eventDescription: req.body.eventDescription,
+    ticketCount: req.body.ticketCount,
+    createdAt: req.body.createdAt
+  }}, { new: true })
+    .exec()
+    .then(eventObj => res.json(eventObj))
+    .catch(e => res.json(e))
 }
     
 function deleteMerchant(req, res, next) {
@@ -97,4 +100,4 @@ function getEvent() {
 
 
 
- export default { createEvent, getEvent};
+ export default { createEvent, updateEvent, getEvent};
