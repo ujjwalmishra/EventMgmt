@@ -46,7 +46,7 @@ router.route('/update/event')
 .post(expressJwt({ secret: config.jwtSecret }), eventCtrl.updateEvent);
 
 router.route('/delete/event')
-/*** POST /api/merchant/update/event - to update an existing event */
+/*** POST /api/merchant/update/event - to delete an existing event */
 .post(expressJwt({ secret: config.jwtSecret }), eventCtrl.deleteEvent);
 
 //Select a event from list for mobile app
