@@ -60,27 +60,38 @@ function updateEvent(req, res, next) {
     .catch(e => res.json(e))
 }
     
-function deleteMerchant(req, res, next) {
-  const merchantId = req.body.merchantId;
-  if(merchantId == null) {
-    const err = new APIError('Provide a id!', httpStatus.NOT_FOUND);
-    return next(err); 
+function deleteEvent(req, res, next) {
+  
+    const eventName = req.body.eventName;
+    if(eventName == null || eventName == undefined){
+      const err = new APIError('Provide an event name!!', httpStatus.NOT_FOUND);
+      return next(err);
+    }
+    Event.findOne({"eventName" : eventName})
+      .exec()
+      .then(eventObj => {
+        if(eventObj.merchant == req.session.merchant._id)
+        {
+          Event.remove({"eventName" : eventObj.eventName})
+            .exec()
+            .then(writeResult => {
+              console.log("***********************************************" + eventObj.merchant);
+              console.log("***********************************************" + writeResult.nRemoved);
+                Merchant.findOneAndUpdate({_id:req.session.merchant._id}, {$pull : {"events" : eventObj._id}}, { new: true })
+                  .exec()
+                  .then(merchantObj => res.json({"message":"Remove event "+eventObj.eventName+" from merchant "+merchantObj.email}))
+                  .catch(e => {
+                    const event = new Event(eventObj);
+                    event.save()
+                    .then(savedEventObj => res.json({"message":"Event not deleted"}))
+                    .catch(e => res.json({"message":"Please contact administrator"}))
+                  })
+            })
+            .catch(e => res.json(e))
+        }
+        })
+        .catch(e => res.json(e))
   }
-  Merchant.find({ _id: merchantId })
-  .remove()
-  .exec()
-  .then(deletedMerchant => {
-    Admin.findOne({username: req.user.username})
-    .exec()
-    .then((admin) => {
-      admin.merchants.pull(merchantId);
-      admin.save()
-      .then(admin => res.json(deletedMerchant))
-      .catch(e => next(e));
-    })
-  })
-  .catch(e => next(e))
-}
     
 function getMerchants(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
@@ -100,4 +111,4 @@ function getEvent() {
 
 
 
- export default { createEvent, updateEvent, getEvent};
+ export default { createEvent, updateEvent, deleteEvent, getEvent};
