@@ -3,6 +3,7 @@ import adminRoutes from './admin.route';
 import userRoutes from './user.route';
 import authRoutes from './auth.route';
 import merchantRoutes from './merchant.route';
+import ticketRoutes from './ticket.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -16,6 +17,9 @@ router.use('/admin', adminRoutes);
 
 // mount merchant routes at /merchant
 router.use('/merchant', merchantRoutes);
+
+// mount tickets routes at /ticket
+router.use('/ticket', ticketRoutes);
 
 // mount user routes at /users
 router.use('/users', userRoutes);

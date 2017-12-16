@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
+import mongoose from 'mongoose';
 import APIError from '../helpers/APIError';
 import config from '../../config/config';
+import Event from '../models/event.model';
 import Ticket from '../models/ticket.model';
 import Order from '../models/orders.model';
 import Item from '../models/items.model';
-import qrgen from '../qrcodes/qrcodegenerator';
-import Transaction from 'mongoose-transactions';
-
+import async from 'async';
 
 
 function getOrders(req, res, next) {
@@ -22,57 +22,72 @@ function buyItems(req, res, next) {
 
   let updatedCredit;
 
-  Ticket.find({_id: ticketId}).exec()
+  Ticket.findOne({_id: req.body.ticketId}).exec()
   .then(ticket => {
     if(ticket.totalCredit - req.body.purchaseAmount < 0) {
       const err = new APIError('Invalid purchase amount',  httpStatus.OK);
       return next(err);
     }
     else {
+      console.log(ticket.totalCredit);
       updatedCredit = ticket.totalCredit - req.body.purchaseAmount;
+
+      const ticketObj = {  $set:{ totalCredit: updatedCredit  }  };
+
+      Ticket.findByIdAndUpdate(req.body.ticketId, ticketObj, function(err, doc) {
+        if(err) {
+           return next(err);
+        };
+
+        const itemArray = req.body.items;
+        const order = new Order({
+          merchant: req.session.merchant._id,
+          event: req.body.eventId,
+          ticket: req.body.ticketId,
+          items: req.body.items         
+        });
+
+        order.save()
+        .then((order) => {
+
+          let itemUpdateArray = [];
+          const itemLength = itemArray.length;
+          let count = 0;
+          itemArray.forEach(function(elem) {
+            
+            Item.findOneAndUpdate({ _id: elem.itemId }, { itemCount: elem.updatedItemCount })
+            .then((doc) => {
+
+              itemUpdateArray.push({"itemId": doc._id, "amount": doc.itemCount});
+       
+              count++;
+              console.log(itemLength);
+              if(count == itemLength) {
+                return res.json({"data": itemUpdateArray});
+              }
+            })
+            .catch((e) => {
+              return next(e);
+              //revert all transaction
+            });
+  
+          });
+
+        })
+        .catch(e => {
+          console.log(e);
+          Ticket.findByIdAndUpdate(req.body.ticketId, {  $set:{ totalCredit: ticket.totalCredit  }},
+          function(err, undoTicket)   {
+            return res.json({"msg": "order failed"});
+          })
+        })      
+      })
     }
+  })
+  .catch((e) => {
+    return next(e);
   });
 
-  const transaction = new Transaction();
-
-  const ticketObj = { 
-      $set:{
-        totalCredit: updatedCredit
-      }
-  };
-  const orderObj = {
-    merchant: req.session.merchant._id,
-    event: req.body.eventId,
-    ticket: req.body.ticketId,
-    items: req.body.items
-  };
-  const itemArray = req.body.items;
-
-
-  async function start () {
-    try {
-
-        transaction.update('Ticket', req.body.ticketId, ticketObj, {new: true});
-        const orderId = transaction.insert('Order', orderObj);
-        itemArray.forEach((elem) => {
-        
-          let itemObj = {
-            itemCount: elem.updatedItemCount  // right now invenotry is unlimited, but in limited invenroty case need to check avaialable qty before proceeding further. Items might have sold out and invenorty is 0
-          };
-
-          transaction.update('Item', elem.itemId, itemObj);
-
-        });
-        const final = await transaction.run()
-        // expect(final[0].name).toBe('Jonathan')
-    } catch (error) {
-        console.error(error)
-        const rollbackObj = await transaction.rollback().catch(console.error)
-        transaction.clean();
-    }
-  }
-
-  start();
 
 }
 
@@ -113,12 +128,22 @@ function generateTickets(req, res, next) {
     res.json({"msg": "Success"});
 
   });
-//   //generate ticket documents
-//    arr = [{ name: 'Star Wars' }, { name: 'The Empire Strikes Back' }];
-// Movies.insertMany(arr, function(error, docs) {});
 
 }
 
+function getTicketId(req, res, next) {
+
+  console.log(req.body.privateKey);
+
+  Ticket.findOne({privateKey : req.body.privateKey})
+  .exec()
+  .then(ticket => {
+    res.json({"ticketId": ticket._id})
+  })
+  .catch(e => next(e))
+
+}
+ 
 
 function getQrCodes(req, res, next) {
 
@@ -127,4 +152,4 @@ function getQrCodes(req, res, next) {
 }
 
 
- export default { getOrders, buyItems, buyCredit, generateTickets, getQrCodes};
+ export default { getOrders, buyItems, buyCredit, generateTickets, getQrCodes, getTicketId};

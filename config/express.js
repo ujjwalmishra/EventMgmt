@@ -10,11 +10,11 @@ import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import winstonInstance from './winston';
+import db from './db';
 import routes from '../server/routes/index.route';
 import config from './config';
 import APIError from '../server/helpers/APIError';
 import session from 'express-session';
-import mongoose from './db';
 import hbs from 'express-hbs';
 import path from 'path';
 
@@ -45,7 +45,7 @@ app.use(cookieParser());
 //session init
 app.use(session({
   secret: config.SECRET,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: new MongoStore({ mongooseConnection: db.connection }),
     resave: false,
     saveUninitialized: true,
     cookie: { secure: !true }
