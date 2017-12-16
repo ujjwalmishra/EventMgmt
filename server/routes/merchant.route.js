@@ -45,6 +45,13 @@ router.route('/update/event')
 /*** POST /api/merchant/update/event - to update an existing event */
 .post(expressJwt({ secret: config.jwtSecret }), eventCtrl.updateEvent);
 
+router.route('/delete/event')
+/*** POST /api/merchant/delete/event - to delete an existing event */
+.post(expressJwt({ secret: config.jwtSecret }), eventCtrl.deleteEvent);
+
+router.route('/list/event')
+/*** GET /api/merchant/list/event - to get the list of events */
+.get(expressJwt({ secret: config.jwtSecret }), eventCtrl.listEvents);
 
 //Select a event from list for mobile app
 //returns json for items in event

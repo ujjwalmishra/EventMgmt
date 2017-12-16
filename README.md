@@ -19,9 +19,9 @@ To DO:
     i) /merchant/resetpassword</br>
     j) /merchant/updatepassword</br>
     k) /merchant/create/event</br>
-    l) /merchant/update/event</br></strike>
+    l) /merchant/update/event</br>
     m) /merchant/delete/event</br>
-    n) /merchant/list/event</br>
+    n) /merchant/list/event</br></strike>
     o) /merchant/upload/template</br>
     
   3) Items</br>
