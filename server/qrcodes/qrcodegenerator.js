@@ -31,7 +31,7 @@ function generateQR(keys, eventId) {
 
   for(let i=0; i < keys.length; i++) {
     
-    let qr_png = qr.image(keys[i].secretKey, { type: 'png', size: 2, margin: 2 });
+    let qr_png = qr.image(keys[i].secretKey, { type: 'png', size: 4, margin: 2 });
     let pngImagePath = "Event-" + eventId + "-" + i + ".png"; 
 
     qr_png.pipe(fs.createWriteStream("public/codes/" +pngImagePath ));

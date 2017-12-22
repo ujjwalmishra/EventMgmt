@@ -7,6 +7,7 @@ import Event from '../models/event.model';
 import Ticket from '../models/ticket.model';
 import Order from '../models/orders.model';
 import Item from '../models/items.model';
+import qrgen from '../qrcodes/qrcodegenerator'
 import async from 'async';
 
 
@@ -22,7 +23,7 @@ function buyItems(req, res, next) {
 
   let updatedCredit;
 
-  Ticket.findOne({_id: req.body.ticketId}).exec()
+  Ticket.findOne({privateKey: req.body.secret}).exec()
   .then(ticket => {
     if(ticket.totalCredit - req.body.purchaseAmount < 0) {
       const err = new APIError('Invalid purchase amount',  httpStatus.OK);
@@ -34,16 +35,16 @@ function buyItems(req, res, next) {
 
       const ticketObj = {  $set:{ totalCredit: updatedCredit  }  };
 
-      Ticket.findByIdAndUpdate(req.body.ticketId, ticketObj, function(err, doc) {
+      Ticket.findByIdAndUpdate(ticket._id, ticketObj, function(err, doc) {
         if(err) {
            return next(err);
         };
-
+    
         const itemArray = req.body.items;
         const order = new Order({
-          merchant: req.session.merchant._id,
+          merchant: doc.merchant,
           event: req.body.eventId,
-          ticket: req.body.ticketId,
+          ticket: doc._id,
           items: req.body.items         
         });
 
@@ -54,11 +55,11 @@ function buyItems(req, res, next) {
           const itemLength = itemArray.length;
           let count = 0;
           itemArray.forEach(function(elem) {
-            
-            Item.findOneAndUpdate({ _id: elem.itemId }, { itemCount: elem.updatedItemCount })
-            .then((doc) => {
+            console.log(elem);
+            Item.findOneAndUpdate({ _id: elem.itemId }, { $inc: { itemCount : -elem.itemCount}, new: true })
+            .then((item) => {
 
-              itemUpdateArray.push({"itemId": doc._id, "amount": doc.itemCount});
+              itemUpdateArray.push({"itemId": item._id, "amount": item.itemCount});
        
               count++;
               console.log(itemLength);
@@ -67,6 +68,7 @@ function buyItems(req, res, next) {
               }
             })
             .catch((e) => {
+              console.log(e);
               return next(e);
               //revert all transaction
             });
@@ -76,7 +78,7 @@ function buyItems(req, res, next) {
         })
         .catch(e => {
           console.log(e);
-          Ticket.findByIdAndUpdate(req.body.ticketId, {  $set:{ totalCredit: ticket.totalCredit  }},
+          Ticket.findByIdAndUpdate(doc._id, {  $set:{ totalCredit: ticket.totalCredit  }},
           function(err, undoTicket)   {
             return res.json({"msg": "order failed"});
           })
@@ -107,13 +109,14 @@ function generateTickets(req, res, next) {
   const ticketQrs = qrgen.generateQR(tickets, req.body.eventId); // return QR images path
 
   const ticketDocuments = [];
+  console.log("Total Credit", req.body.totalCredit);
   for(let i=0; i < tickets.length; i++) {
     tickets[i].qr = ticketQrs[i];
     let ticketDocument = {};
     ticketDocument.merchant = req.session.merchant._id;
     ticketDocument.event = req.body.eventId;
-    ticketDocument.totalCredit = req.body.totalCredit || 100;
-    ticketDocument.creditHistory = [100];
+    ticketDocument.totalCredit = req.body.totalCredit ;
+    ticketDocument.creditHistory = [ticketDocument.totalCredit];
     ticketDocument.qrCodePath = ticketQrs[i];
     ticketDocument.publicKey = tickets[i].publicKey;
     ticketDocument.privateKey = tickets[i].secretKey;
@@ -121,7 +124,8 @@ function generateTickets(req, res, next) {
   }
 
   Ticket.insertMany(ticketDocuments, function(error, docs) {
-    
+    console.log(error);
+    console.log(docs);
     if(error) {
      return next(error);
     };

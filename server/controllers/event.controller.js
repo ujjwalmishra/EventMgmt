@@ -94,7 +94,15 @@ function deleteEvent(req, res, next) {
   }
     
 function listEvents(req, res, next) {
-  Event.find({"merchant":req.session.merchant._id}).exec()
+  let merchantid;
+  if(req.body.merchant) {
+    merchantid = req.body.merchant;
+  }
+  else {
+    merchantid = req.session.merchant._id;
+  }
+  console.log(merchantid);
+  Event.find({"merchant":merchantid}).exec()
     .then(events => res.json(events))
     .catch(e => next(e));
 }

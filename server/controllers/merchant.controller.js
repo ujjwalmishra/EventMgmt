@@ -44,7 +44,8 @@ const smtpTransport = nodemailer.createTransport(config.mailer.options);
                 session.merchant = merchant;
                 return res.json({
                     token,
-                    email: merchant.email
+                    email: merchant.email,
+                    id: merchant._id
                 });
             }
             else {

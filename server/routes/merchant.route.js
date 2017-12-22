@@ -51,7 +51,7 @@ router.route('/delete/event')
 
 router.route('/list/event')
 /*** GET /api/merchant/list/event - to get the list of events */
-.get(expressJwt({ secret: config.jwtSecret }), eventCtrl.listEvents);
+.post(expressJwt({ secret: config.jwtSecret }), eventCtrl.listEvents);
 
 //Select a event from list for mobile app
 //returns json for items in event
