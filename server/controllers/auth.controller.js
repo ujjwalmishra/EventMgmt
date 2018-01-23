@@ -24,7 +24,7 @@ function login(req, res, next) {
     });
   }
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+  const err = new APIError('Authentication error', httpStatus.OK, true);
   return next(err);
 }
 

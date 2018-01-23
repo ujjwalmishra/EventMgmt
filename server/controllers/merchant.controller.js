@@ -24,12 +24,12 @@ const smtpTransport = nodemailer.createTransport(config.mailer.options);
       .exec()
       .then((merchant) => {
           if(!merchant) {
-              let err = new APIError('No such user exists!',  httpStatus.UNAUTHORIZED, true);
+              let err = new APIError('No such user exists!',  httpStatus.OK, true);
               return next(err);
           }
           merchant.comparePassword(req.body.password, (err, isMatch) => {
             if (err) { 
-                let err = new APIError('No such password exists!',  httpStatus.UNAUTHORIZED, true);
+                let err = new APIError('No such password exists!',  httpStatus.OK, true);
                 return next(err); 
             }
             if (isMatch) {
@@ -49,7 +49,7 @@ const smtpTransport = nodemailer.createTransport(config.mailer.options);
                 });
             }
             else {
-                err = new APIError('No such password exists!',  httpStatus.UNAUTHORIZED, true);
+                err = new APIError('No such password exists!',  httpStatus.OK, true);
                 return next(err); 
             }
           });
@@ -61,7 +61,7 @@ function logout(req, res, next) {
 
     req.session.merchant = null;
 
-    res.json({"msg" : "UnAuth"});
+    res.json({"success" : "logged out"});
 
 }
 

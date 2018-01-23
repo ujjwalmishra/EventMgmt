@@ -82,9 +82,9 @@ function createMerchant(req, res, next) {
             eventCount: req.body.eventCount
           })
 
+
           merchant.save()
             .then(savedMerchant => {
-                    console.log("got merchant");
               admin.merchants.push(savedMerchant._id);
               admin.save()
               .then(admin => res.json(savedMerchant))
@@ -92,16 +92,23 @@ function createMerchant(req, res, next) {
               
             }
             )
-            .catch(e => next(e)); 
+            .catch(e => {
+                const err = new APIError('Merchant Save Failed 1!', httpStatus.OK, true);
+              next(err)}); 
           }
           else {
-            const err = new APIError('Email id exists already!', httpStatus.CONFLICT);
+            const err = new APIError('Email id exists already!', httpStatus.OK, true);
             return next(err); 
           }
         } )
+        .catch(e => {
+                const err = new APIError('Merchant Save Failed 2!', httpStatus.OK, true);
+              next(err)}); 
 
   })
-  .catch(e => next(e));
+    .catch(e => {
+      const err = new APIError('Merchant Save Failed 3!', httpStatus.OK, true);
+    next(err)}); 
 
 
 }
@@ -115,15 +122,15 @@ function updateMerchant(req, res, next) {
     userCount: req.body.userCount,
     eventCount: req.body.eventCount
   }}, { new: true }, function (err, merchant) {
-    if (err) return next(err);
-    res.send(merchant);
+    if (err) return next(new APIError('Merchant Update Failed!', httpStatus.OK, true));
+    res.json(merchant);
   });
 }
 
 function deleteMerchant(req, res, next) {
   const merchantId = req.body.merchantId;
   if(merchantId == null) {
-    const err = new APIError('Provide a id!', httpStatus.NOT_FOUND);
+    const err = new APIError('Provide a id!', httpStatus.OK, true);
     return next(err); 
   }
   Merchant.find({ _id: merchantId })
@@ -139,14 +146,14 @@ function deleteMerchant(req, res, next) {
       .catch(e => next(e));
     })
   })
-  .catch(e => next(e))
+  .catch(e => next(new APIError('Merchant Delete Failed!', httpStatus.OK, true)))
 }
 
 function getMerchants(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
   Merchant.list({ limit, skip })
     .then(merchants => res.json(merchants))
-    .catch(e => next(e));
+    .catch(e => next(new APIError('Merchant List Failed!', httpStatus.OK, true)));
 }
 
 

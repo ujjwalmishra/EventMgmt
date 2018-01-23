@@ -96,7 +96,7 @@ function buyItems(req, res, next) {
 
 function buyCredit(req, res, next) {
 
-  Ticket.findOneAndUpdate({_id : req.body.ticketId}, {$inc : {'totalCredit' : req.body.topUpAmount}}).exec()
+  Ticket.findOneAndUpdate({_id : req.body.ticketId, event : req.body.eventId}, {$inc : {'totalCredit' : req.body.topUpAmount}}).exec()
   .then(() => res.json({"msg": "updated succuessfully"}))
   .catch((e) => next(e));
 

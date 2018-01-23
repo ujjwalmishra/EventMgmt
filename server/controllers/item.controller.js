@@ -98,6 +98,7 @@ function removeItem(req, res, next) {
 
 function getItems(req, res, next) {
 
+    console.log(req.params.eventId);
     Item.list({ _id: req.params.eventId })
     .then(items => res.json(items))
     .catch(e => next(e));

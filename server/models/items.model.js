@@ -26,6 +26,7 @@ const ItemSchema = new mongoose.Schema({
   },
   itemImage: String,
   itemCount: Number,
+  currency: String,
   createdAt: {
     type: Date,
     default: Date.now

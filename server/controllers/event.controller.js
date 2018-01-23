@@ -28,19 +28,19 @@ function createEvent(req, res, next) {
       .then(eventObj => {
           Merchant.findByIdAndUpdate({_id:req.session.merchant._id},{$push: {events: eventObj._id}})
             .exec().then(merchObj => {
-              res.json({"message":"Event saved", "eventId": eventObj._id});
+              res.json({"success":"Event saved", "eventId": eventObj._id});
             })
             //todo add organizer details in merchant/event
             .catch(e => {
                 console.log(e);
                 Event.find({ _id: eventObj._id }).remove()
-                 .exec().then(obj => res.json({"message":"Event update to merchant failed"}))
-                 .catch(e => res.json({"message":"contact administrator"}));
+                 .exec().then(obj => next(new APIError('Update Event to Merachnt Failed!', httpStatus.OK, true)))
+                 .catch(e => next(new APIError('Contact Admin!', httpStatus.OK, true)));
             })
       })
       .catch(e => 
-        {   console.log(e);
-            res.json({"message": "Event save failed"})})
+        {   
+            next(new APIError('Create Event Failed!', httpStatus.OK, true))})
     }
     
 function updateEvent(req, res, next) {
@@ -57,14 +57,14 @@ function updateEvent(req, res, next) {
   }}, { new: true })
     .exec()
     .then(eventObj => res.json(eventObj))
-    .catch(e => res.json(e))
+    .catch(e => next(new APIError('Update Event Failed!', httpStatus.OK, true)))
 }
     
 function deleteEvent(req, res, next) {
   
     const eventName = req.body.eventName;
     if(eventName == null || eventName == undefined){
-      const err = new APIError('Provide an event name!!', httpStatus.NOT_FOUND);
+      const err = new APIError('Provide an event name!!', httpStatus.OK, true);
       return next(err);
     }
     Event.findOne({"eventName" : eventName})
@@ -75,22 +75,20 @@ function deleteEvent(req, res, next) {
           Event.remove({"eventName" : eventObj.eventName})
             .exec()
             .then(writeResult => {
-              console.log("***********************************************" + eventObj.merchant);
-              console.log("***********************************************" + writeResult.nRemoved);
                 Merchant.findOneAndUpdate({_id:req.session.merchant._id}, {$pull : {"events" : eventObj._id}}, { new: true })
                   .exec()
-                  .then(merchantObj => res.json({"message":"Remove event "+eventObj.eventName+" from merchant "+merchantObj.email}))
+                  .then(merchantObj => res.json({"success":"Removed event "+eventObj.eventName+" from merchant "+merchantObj.email}))
                   .catch(e => {
                     const event = new Event(eventObj);
                     event.save()
                     .then(savedEventObj => res.json({"message":"Event not deleted"}))
-                    .catch(e => res.json({"message":"Please contact administrator"}))
+                    .catch(e => next(new APIError('Event Delete Failed 1!', httpStatus.OK, true)))
                   })
             })
-            .catch(e => res.json(e))
+            .catch(e => next(new APIError('Event Delete Failed 2!', httpStatus.OK, true)))
         }
         })
-        .catch(e => res.json(e))
+        .catch(e => next(new APIError('Event Doesn\'t Exist!', httpStatus.OK, true)))
   }
     
 function listEvents(req, res, next) {
